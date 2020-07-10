@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0cc842c1-e7ba-4ec4-a856-859f46c35003" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="sample-integrationFlow" doc:id="0595bca0-90cb-45dc-a021-3877798bd1f4" >
+		<http:listener doc:name="Listener" doc:id="bbbf1df1-0d74-4440-9d5c-a449a24b2dd9" config-ref="HTTP_Listener_config" path="/demo" outputMimeType="application/json"/>
+		<set-variable value="#[payload.name]" doc:name="customerName" doc:id="49adba0e-db92-4626-ab8b-a7391be84e4e" variableName="customerName"/>
+		<logger level="INFO" doc:name="Customer Name" doc:id="fd2c866f-5de1-4cd8-8d57-c9351c39a2ac" message="#[payload]"/>
+		<choice doc:name="Choice" doc:id="0fa93990-a966-429e-9741-5ffea551e66d" >
+			<when expression="#[upper(vars.customerName) == 'ABC']">
+				<flow-ref doc:name="called-flow" doc:id="8d85a89a-0c28-4216-8cb0-dee224ab6808" name="calledFlow"/>
+				<logger level="INFO" doc:name="invocation-coplete" doc:id="9b3b8e70-0ad9-433e-94d2-bdad3ccd7ba3" message="#['invocation-complete']"/>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="ecda0a63-07e9-4086-a33d-cf76b7f797d1" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+'None validated'
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="None Called" doc:id="c39d7053-5086-45ae-95ed-51f0783e76ec" message="#[payload]" />
+			
+</otherwise>
+		</choice>
+	</flow>
+</mule>

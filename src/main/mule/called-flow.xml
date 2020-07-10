@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="calledFlow" doc:id="9f0b2752-f46f-4dbf-91a8-6de99ebb7fa7" >
+		<logger level="INFO" doc:name="validation-step1" doc:id="a460b379-7c5d-4446-8be2-9d8d101a356d" message="#['step1 executed']"/>
+		<ee:transform doc:name="ABC" doc:id="841a8f5c-0fbc-4f3a-bd0d-5effacd5083e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"name":"ABC logic executed"	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="validation-step2" doc:id="d16a1fa3-8154-42c0-b1d0-b27c46b047ae" message="#['step2 executed']"/>
+	</flow>
+</mule>
+
+
+
+
